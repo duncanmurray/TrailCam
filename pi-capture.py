@@ -125,11 +125,11 @@ for i in range(photo_num):
     print("Info: Attemptng to capture {} still images".format(photo_num))
     image_filename = next_path(save_directory + 'IMAGE%s.jpg')
     capture_photo(image_filename)
-
 # Ideally find a way to not have to specify file extention
 video_filename = next_path(save_directory + 'VIDEO%s.h264')
 # Capture a video.  Doing it this way just adds .mp4 to the video name
 capture_video(video_filename, video_filename + ".mp4", 10)
+
 # This is how long we will wait for further motion
 timeout_seconds = 60*2
 timeout_time = time.time() + timeout_seconds   # N minutes from now
@@ -146,7 +146,7 @@ while True:
         video_filename = next_path(save_directory + 'VIDEO%s.h264')
         #Take Video.  Doing it this way just adds .mp4 to the video name
         capture_video(video_filename, video_filename + ".mp4", 10)
-        
+
         timeout_time = time.time() + timeout_seconds   # N minutes from now
         print("Info: Waiting up to {} seconds for further motion".format(timeout_seconds))
 
@@ -156,6 +156,17 @@ while True:
         print("Warning: Exiting because no motion was detected in {} seconds".format(timeout_seconds))
         break
     test = test - 1
+
+# Upload to Google Photos
+print("Info: Reading gphotos-uploader-cli password file")
+with open('/home/pi/.gphotos-uploader-cli/token_password.txt', 'r') as file:
+    tokenPassword = file.read().replace('\n', '')
+#Set the environment variable with the token password so there is no need for user input
+os.environ["GPHOTOS_CLI_TOKENSTORE_KEY"] = tokenPassword
+#Upload files to google photos
+print("Info: Uploading files to Google Photos")
+subprocess.call(["/home/pi/Projects/gphotos-uploader-cli/gphotos-uploader-cli", "push"])
+
 
 # Shutdown now that we're finished
 print("Warning: Shutting down Raspberry Pi")
