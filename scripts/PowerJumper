@@ -1,0 +1,5 @@
+#To switch the Software Jumper ON type:
+i2cset -y 1 0x24 0xFD
+    
+#To switch the Software Jumper OFF (power on default) type:
+i2cset -y 1 0x24 0xFF
