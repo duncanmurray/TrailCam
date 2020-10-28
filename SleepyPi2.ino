@@ -1,5 +1,5 @@
 // 
-// This program is meant to be uploaded tot he SleepyPi2
+// This program is meant to be uploaded to t he SleepyPi2
 // It will monitor the PIR sensor for a trigger and if detected it will turn on the Raspberry Pi
 // The program will also output movement to the serial port of the Raspberry Pi to be detected by 
 // the script that is capturing images.
