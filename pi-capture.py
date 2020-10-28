@@ -57,10 +57,10 @@ def next_path(path_pattern):
 
 #Create a function for taking videos and converting them to MP4
 def capture_video(file_h264, file_mp4, vid_length):
-    camera.rotation = 180
+    #camera.rotation = 180
     camera.resolution = (1640, 1232)
     now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
+    current_time = now.strftime("%m/%d/%Y %H:%M:%S")
     camera.annotate_background = picamera.Color('black')
     camera.annotate_text_size = 25
     camera.annotate_text = "Date: {}   Temp: {}C   Humidity: {}% ".format(current_time, temperature, humidity)
@@ -76,16 +76,18 @@ def capture_video(file_h264, file_mp4, vid_length):
     print("Info: Converting video to MP4 as {}".format(file_mp4))
     command = "MP4Box -add " + file_h264 + " " + file_mp4
     call([command], shell=True)
+    #Clean up temp files
+    os.remove(file_h264)
 
 #Create a function for taking pictures
 def capture_photo(file_jpg):
     now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
+    current_time = now.strftime("%m/%d/%Y %H:%M:%S")
     camera.resolution = (2592, 1944)
     camera.annotate_background = picamera.Color('black')
     camera.annotate_text_size = 25
     camera.annotate_text = "Date: {}   Temp: {}C   Humidity: {}% ".format(current_time, temperature, humidity)
-    camera.rotation = 180
+    #camera.rotation = 180
     print("Info: Capturing still image as {}".format(file_jpg))
     camera.capture(file_jpg)
 
@@ -112,37 +114,6 @@ bme280data = bme280.sample(bus, address, calibration_params)
 
 temperature = round(bme280data.temperature,1)
 humidity = round(bme280data.humidity,1)
-
-
-# For some reason this can't go in a function
-#def get_temperature():
-# Initial the dht device, with data pin connected to:
-#dhtDevice = adafruit_dht.DHT11(board.D17)
-#Start the counter at 0
-#attempts = 0
-#Change how many attempts to try to read the sensor
-#while attempts < 2:
-#    print("Info: Attempt {} to read DHT sensor".format(attempts))
-#    try:
-#        # Print the values to the serial port
-#        temperature_c = dhtDevice.temperature
-#        temperature_f = temperature_c * (9 / 5) + 32
-#        humidity = dhtDevice.humidity
-#        break
-#    except RuntimeError as error:
-#        #Increment the counter
-#        attempts += 1
-#        # Errors happen fairly often, DHT's are hard to read, just keep going
-#        print("Error: Unable to retreive data from DHT sensor")
-#        print("Error: {}".format(error.args[0]))
-#        
-#    time.sleep(2.0)
-#    if attempts == 2:
-#        temperature_c = 0
-#        temperature_f = 0
-#        humidity = 0
-
-
 
 camera = PiCamera()
 
